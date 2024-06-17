@@ -7,3 +7,5 @@ Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
 });
 
 Broadcast::channel('chat', fn () => true);
+
+Broadcast::channel('test', fn () => true);

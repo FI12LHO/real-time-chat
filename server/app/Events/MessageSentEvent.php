@@ -15,19 +15,14 @@ class MessageSentEvent implements ShouldBroadcastNow
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public string $author;
     public string $message;
-    public string $date;
-
 
     /**
      * Create a new event instance.
      */
-    public function __construct($author, $message, $date)
+    public function __construct($message)
     {
-        $this -> author = $author;
         $this -> message = $message;
-        $this -> date = $date;
     }
 
     /**

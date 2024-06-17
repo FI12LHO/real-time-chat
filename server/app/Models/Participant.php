@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Participant extends Model
 {
@@ -41,4 +42,14 @@ class Participant extends Model
         'user_id',
         'chat_id',
     ];
+
+    public static function getAllMyChats(string $id): \Illuminate\Support\Collection
+    {
+        $chats = DB::table('participants')
+            -> where('participants.user_id', '=', $id)
+            -> leftJoin('chats', 'participants.chat_id', '=', 'chats.id')
+            -> get('*');
+
+        return $chats;
+    }
 }

@@ -7,9 +7,9 @@ use Illuminate\Http\Request;
 
 class MessageController extends Controller
 {
-    public function index(Request $request)
+    public function index(string $chat_id)
     {
-        $messages = \App\Models\Message::getAllData();
+        $messages = \App\Models\Message::getAllData($chat_id);
         return response() -> json($messages);
     }
 
@@ -34,16 +34,18 @@ class MessageController extends Controller
         
         if (!isset($message)) {
             // Em caso de erro
-            return response() -> json();
+            return response() -> json([
+                'status' => 'fail',
+                'message' => 'Failure when sending the message',
+            ]);
         }
 
         // Disparando evento
-        event(new MessageSentEvent(
-            $credentials['author'],
-            $credentials['message'],
-            $credentials['date']
-        ));
+        event(new MessageSentEvent($credentials['message']));
 
-        return response() -> json();
+        return response() -> json([
+            'status' => 'success',
+            'message' => 'message sent',
+        ]);
     }
 }

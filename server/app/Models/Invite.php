@@ -2,21 +2,20 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
-class Message extends Model
+class Invite extends Model
 {
-    use HasFactory, HasUuids;
+    use HasFactory;
 
     /**
      * The table associated with the model.
      *
      * @var string
      */
-    protected $table = 'messages';
+    protected $table = 'invites';
 
     /**
      * The primary key associated with the table.
@@ -26,27 +25,24 @@ class Message extends Model
     protected $primaryKey = 'id';
 
     /**
-     * The data type of the primary key ID.
-     *
-     * @var string
-     */
-    protected $keyType = 'string';
-
-    /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
      */
     protected $fillable = [
         'id',
-        'message',
-        'date',
         'chat_id',
-        'user_id',
+        'chat_name',
+        'invite',
     ];
 
-    public static function getAllData(string $chat_id): \Illuminate\Support\Collection
+    public static function getChatWithInvitation(string $invite)
     {
-        return DB::table('messages') -> where('chat_id', '=', $chat_id) -> get();
+        $chat = DB::table('invites')
+            -> where('invites.invite', '=', $invite)
+            -> leftJoin('chats', 'invites.chat_id', '=', 'chats.id')
+            -> first();
+
+        return $chat;
     }
 }

@@ -1,19 +1,13 @@
 <?php
 
+use App\Http\Controllers\ParticipantController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/test', function () {
-    $user = \App\Models\User::create([
-        'name' => 'John Doe',
-        'email' => 'john@doe.com',
-        'password' => '123456789',
-    ]);
-
-    // dd($user);
-
-    return response() -> json($user["name"]);
+Route::group(['prefix' => 'invite'], function () {
+    Route::get('/{invite?}', [ParticipantController::class, 'invite']);
+    Route::post('/join', [ParticipantController::class, 'join']) -> name('participants.join');
 });
