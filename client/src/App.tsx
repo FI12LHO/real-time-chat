@@ -1,28 +1,37 @@
-import React, { useEffect } from 'react';
-import useEcho from './hooks/useEcho';
+import React, { useEffect, useState } from 'react';
+import Dashboard from './pages/dashboard';
+import Api from './service/api';
+import Login from './pages/login';
 
-function App() {  
-  const echo = useEcho();
+type UserDataType = {
+  created_at: string,
+  email: string,
+  id: string,
+  name: string,
+  updated_at: string,
+  token?: string,
+};
+
+function App() {
+  const [logged, setLogged] = useState(false);
 
   useEffect(() => {
-    if (!echo) {
+    const token = localStorage.getItem('token');
+
+    if (token === null || token === '') {
       return;
     }
 
-    echo.channel('chat').listen('MessageSentEvent', (event: any) => {
-      console.log(event);
-    });
-
-    return () => {
-      if (echo) {
-        echo.leaveChannel("chat");
-      }
-    };
-
-  }, [echo]);
+    Api.post('/auth/me', undefined, {headers: {'Authorization': `Bearer ${token}`}})
+    .then(res => res.data)
+    .then((res: UserDataType) => res?.id ? setLogged(true) : null)
+    .catch(error => console.error(error));
+  });
 
   return (
-    <div className="App"></div>
+    <>
+      { logged ? <Dashboard /> : <Login /> }
+    </>
   );
 }
 
