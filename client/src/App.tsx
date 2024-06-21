@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import Dashboard from './pages/dashboard';
-import Api from './service/api';
-import Login from './pages/login';
+import React, { useEffect, useState } from "react";
+import Dashboard from "./pages/dashboard";
+import Api from "./service/api";
+import Auth from "./pages/auth";
 
-type UserDataType = {
+export type UserDataType = {
   created_at: string,
   email: string,
   id: string,
@@ -24,13 +24,16 @@ function App() {
 
     Api.post('/auth/me', undefined, {headers: {'Authorization': `Bearer ${token}`}})
     .then(res => res.data)
-    .then((res: UserDataType) => res?.id ? setLogged(true) : null)
-    .catch(error => console.error(error));
-  });
+    .then((res: UserDataType) => res?.id ? setLogged(true) : localStorage.clear())
+    .catch(error => {
+      console.error(error);
+      localStorage.clear();
+    });
+  }, []);
 
   return (
     <>
-      { logged ? <Dashboard /> : <Login /> }
+      {logged ? <Dashboard /> : <Auth />}
     </>
   );
 }

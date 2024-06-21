@@ -47,6 +47,14 @@ class Message extends Model
 
     public static function getAllData(string $chat_id): \Illuminate\Support\Collection
     {
-        return DB::table('messages') -> where('chat_id', '=', $chat_id) -> get();
+        return DB::table('messages')
+            -> where('chat_id', '=', $chat_id) 
+            -> leftJoin('users', 'messages.user_id', '=', 'users.id')
+            -> get();
+    }
+
+    public static function countMessages() : int
+    {
+        return DB::table('messages') -> count();
     }
 }

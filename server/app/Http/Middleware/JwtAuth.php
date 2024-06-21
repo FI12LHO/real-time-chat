@@ -30,7 +30,6 @@ class JwtAuth
                 'status' => 'fail',
                 'error' => 'Jwt authentication failed',
                 'message' => 'Bearer token invalid.',
-                'user' => $user,
             ], 403);    
         }
 

@@ -16,11 +16,14 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         UserSeed::run('user-1', "Jane Doe", "jane@doe.com", "123456789");
-        ChatSeed::run('chat-1', "Chat test", 'user-1');
-        ParticipantSeed::run('user-1', 'chat-1');
-        MessageSeed::run("Hello World!!", '14-06-2024 13:27', 'chat-1', 'user-1');
-        Invite::create(['chat_id' => 'chat-1', 'chat_name' => 'Chat test', 'invite' => Str::random(16)]);
+        UserSeed::run('user-2', "John Doe", "john@doe.com", "123456789");
 
+        ChatSeed::run('chat-1', "Familia", 'user-1');
+
+        ParticipantSeed::run('user-1', 'chat-1');
+        ParticipantSeed::run('user-2', 'chat-1');
+
+        /*
         for($i = 1; $i <= 10; $i ++) {
             $user_id = Str::random(8);
             $chat_id = Str::random(8);
@@ -35,5 +38,6 @@ class DatabaseSeeder extends Seeder
             ParticipantSeed::run('user-1', $chat_id);
             MessageSeed::run("Hello World!!", '14-06-2024 13:27', $chat_id, 'user-1');
         }
+        */
     }
 }

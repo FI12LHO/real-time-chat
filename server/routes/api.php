@@ -27,3 +27,15 @@ Route::group(['middleware' => JwtAuth::class, 'prefix' => 'chat'], function () {
     Route::post('/', [ChatController::class, 'index']) -> name('chat.index');
     Route::post('/create', [ChatController::class, 'create']) -> name('chat.create');
 });
+
+Route::get('/dashboard/count', function () {
+    $users = \App\Models\User::countUsers();
+    $messages = \App\Models\Message::countMessages();
+    $chats = \App\Models\Chat::countChats();
+
+    return response() -> json([
+        'users' => $users,
+        'messages' => $messages,
+        'chats' => $chats,
+    ]);
+});

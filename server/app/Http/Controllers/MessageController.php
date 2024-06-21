@@ -41,7 +41,7 @@ class MessageController extends Controller
         }
 
         // Disparando evento
-        event(new MessageSentEvent($credentials['message']));
+        event(new MessageSentEvent());
 
         return response() -> json([
             'status' => 'success',
